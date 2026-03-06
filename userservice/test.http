@@ -1,0 +1,178 @@
+### ============================================
+### USER SERVICE API - COMPREHENSIVE TEST SUITE
+### ============================================
+### Base URL: http://localhost:8081
+### Updated: March 6, 2026
+
+### ============================================
+### 1. USER CREATION ENDPOINTS
+### ============================================
+
+### 1a. Create User - Valid
+POST http://localhost:8081/api/users
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "password": "SecurePassword123!"
+}
+
+### 1b. Create User - Another Valid User
+POST http://localhost:8081/api/users
+Content-Type: application/json
+
+{
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "password": "SecurePassword456!"
+}
+
+### 1c. Create User - Invalid Email
+POST http://localhost:8081/api/users
+Content-Type: application/json
+
+{
+    "name": "Invalid User",
+    "email": "invalid-email",
+    "password": "SecurePassword123!"
+}
+
+### 1d. Create User - Weak Password
+POST http://localhost:8081/api/users
+Content-Type: application/json
+
+{
+    "name": "Weak Password User",
+    "email": "weak@example.com",
+    "password": "weak"
+}
+
+### 1e. Create User - Duplicate Email
+POST http://localhost:8081/api/users
+Content-Type: application/json
+
+{
+    "name": "Duplicate User",
+    "email": "john.doe@example.com",
+    "password": "SecurePassword789!"
+}
+
+### ============================================
+### 2. AUTHENTICATION ENDPOINTS
+### ============================================
+
+### 2a. Login - Valid Credentials
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "john.doe@example.com",
+    "password": "SecurePassword123!"
+}
+
+### 2b. Login - Invalid Email
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "nonexistent@example.com",
+    "password": "AnyPassword123!"
+}
+
+### 2c. Login - Invalid Password
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "john.doe@example.com",
+    "password": "WrongPassword123!"
+}
+
+### 2d. Login - Rate Limit Test (5th attempt)
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "jane.smith@example.com",
+    "password": "WrongPassword"
+}
+
+### ============================================
+### 3. USER UPDATE ENDPOINTS
+### ============================================
+
+### 3a. Update User - Valid (Replace {id} with actual ID)
+PUT http://localhost:8081/api/users/1
+Content-Type: application/json
+
+{
+    "name": "John Updated",
+    "email": "john.updated@example.com",
+    "password": "NewPassword123!"
+}
+
+### 3b. Update User - Invalid Email
+PUT http://localhost:8081/api/users/1
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "invalid-email",
+    "password": "SecurePassword123!"
+}
+
+### 3c. Update User - Non-existent User
+PUT http://localhost:8081/api/users/99999
+Content-Type: application/json
+
+{
+    "name": "Ghost User",
+    "email": "ghost@example.com",
+    "password": "Password123!"
+}
+
+### ============================================
+### 4. USER DELETION ENDPOINTS
+### ============================================
+
+### 4a. Delete User - Valid (Replace {id} with actual ID)
+DELETE http://localhost:8081/api/users/2
+
+### 4b. Delete User - Non-existent User
+DELETE http://localhost:8081/api/users/99999
+
+### ============================================
+### 5. CSV UPLOAD ENDPOINTS
+### ============================================
+
+### 5a. Upload CSV - Valid File
+POST http://localhost:8081/api/users/upload-csv
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="file"; filename="users.csv"
+Content-Type: text/csv
+
+name,email
+Alice Johnson,alice.johnson@example.com
+Bob Williams,bob.williams@example.com
+Carol White,carol.white@example.com
+
+------WebKitFormBoundary--
+
+### 5b. Upload CSV - Missing File
+POST http://localhost:8081/api/users/upload-csv
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary--
+
+### ============================================
+### NOTES FOR TESTING
+### ============================================
+### 1. Replace {id} with actual user IDs from responses
+### 2. Copy JWT token from login response for authenticated endpoints
+### 3. Wait 15 minutes between rate limit tests
+### 4. Use Postman or IntelliJ HTTP Client to run these tests
+### 5. Monitor console for performance metrics
+### ============================================
